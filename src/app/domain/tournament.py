@@ -1,10 +1,10 @@
 from dataclasses import dataclass
-from uuid import UUID
 from datetime import datetime
 
 
 @dataclass
 class Tournament:
-    id: UUID
+    id: int
     name: str
+    description: str
     last_register_date: datetime
