@@ -9,10 +9,14 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="requirementsPath" value="C:\Src\score-typer\src\requirements.txt" />
+    <option name="versionSpecifier" value="Strong equality (==x.y.z)" />
+  </component>
   <component name="PyNamespacePackagesService">
     <option name="namespacePackageFolders">
       <list>
-        <option value="$MODULE_DIR$/src/app/models" />
+        <option value="$MODULE_DIR$/src/app/domain" />
       </list>
     </option>
   </component>

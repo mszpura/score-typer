@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api import ping
+from app.api.routes import users_route
 from app.db import engine, database, metadata
 
 metadata.create_all(engine)
@@ -17,5 +17,4 @@ async def startup():
 async def shutdown():
     await database.disconnect()
 
-
-app.include_router(ping.router)
+app.include_router(users_route.router, prefix="/users", tags=["users"])

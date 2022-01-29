@@ -15,7 +15,7 @@ users = Table(
     metadata,
     Column("id", Integer, primary_key=True),
     Column("username", String(100)),
-    Column("password", String(255)),
+    Column("password", String(100)),
     Column("email", String()),
     Column("created_date", DateTime, default=func.now(), nullable=False)
 )
