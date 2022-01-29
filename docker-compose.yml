@@ -10,16 +10,18 @@ services:
     ports:
       - "8002:8000"
     environment:
-      - DATABASE_URL=postgresql://sa:pa$$w0rd30@db:5432/score_typer_dev
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/score_typer_dev
   db:
     image: postgres:14-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     expose:
       - 5432
+    ports:
+      - "5432:5432"
     environment:
-      - POSTGRES_USER=sa
-      - POSTGRES_PASSWORD=pa$$w0rd30
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=score_typer_dev
 
 volumes:
