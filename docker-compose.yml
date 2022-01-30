@@ -10,7 +10,7 @@ services:
     ports:
       - "8002:8000"
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/score_typer_dev
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/score_typer_dev
   db:
     image: postgres:14-alpine
     volumes:
