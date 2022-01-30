@@ -19,7 +19,6 @@
         <option value="$MODULE_DIR$/src/app/core" />
         <option value="$MODULE_DIR$/src/app/api/dtos" />
         <option value="$MODULE_DIR$/src/app/api/routes" />
-        <option value="$MODULE_DIR$/src/app/api/handlers" />
         <option value="$MODULE_DIR$/src/app/adapters/db" />
       </list>
     </option>

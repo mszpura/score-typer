@@ -10,4 +10,8 @@ class UserDto(BaseModel):
     email: str = Field(..., min_length=5, max_length=200)
 
     def to_domain(self, user_id: UUID) -> User:
-        return User(str(user_id), self.username, self.password, self.email)
+        return User(
+            id=str(user_id),
+            username=self.username,
+            password=self.password,
+            email=self.email)
