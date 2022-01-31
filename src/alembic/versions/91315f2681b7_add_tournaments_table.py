@@ -6,8 +6,7 @@ Create Date: 2022-01-29 18:18:09.474801
 
 """
 from alembic import op
-import sqlalchemy as sa
-from sqlalchemy.sql import func
+from sqlalchemy import Column, Integer, DateTime, JSON, func
 from sqlalchemy.dialects.postgresql import UUID
 
 # revision identifiers, used by Alembic.
@@ -20,9 +19,10 @@ depends_on = None
 def upgrade():
     op.create_table(
         "tournaments",
-        sa.Column("id", UUID(as_uuid=True), primary_key=True, autoincrement=False),
-        sa.Column("json", sa.JSON, nullable=False),
-        sa.Column("created_date", sa.DateTime, default=func.now, nullable=False)
+        Column("table_id", Integer, primary_key=True, autoincrement=True),
+        Column("id", UUID(as_uuid=True), unique=True, index=True),
+        Column("json", JSON, nullable=False),
+        Column("created_date", DateTime, server_default=func.current_timestamp(), nullable=False)
     )
 
 
