@@ -1,21 +1,24 @@
-from dataclasses import dataclass
+from datetime import datetime
 from typing import List, Optional
-from uuid import UUID
+from uuid import uuid4
+from pydantic import BaseModel
 
+from .abstract_entity import AbstractEntity
 from .tournament import Tournament
 
 
-@dataclass
-class TeamResult:
+class TeamResult(BaseModel):
     score: int
     is_winner: bool
     scored_players: List[int]
 
 
-@dataclass
-class Game:
-    id: UUID
+class Game(AbstractEntity):
     tournament: Tournament
-    is_finished: bool
+    finished_date: datetime
     home_result: Optional[TeamResult]
     away_result: Optional[TeamResult]
+
+    @classmethod
+    def create(cls, **kwargs) -> "Game":
+        return cls(id=str(uuid4()), **kwargs)

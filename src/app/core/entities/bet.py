@@ -1,20 +1,19 @@
-from dataclasses import dataclass
 from typing import Optional
 from uuid import UUID
+from pydantic import BaseModel
 
+from .abstract_entity import AbstractEntity
 from .game import Game
 from .user import User
 
 
-@dataclass
-class TeamBet:
+class TeamBet(BaseModel):
     score: int
     is_winner: bool
     scored_player: Optional[int]
 
 
-@dataclass()
-class Bet:
+class Bet(AbstractEntity):
     id: UUID
     game: Game
     owner: User
@@ -30,11 +29,11 @@ class Bet:
                away_score: int,
                is_home_wins: bool,
                home_scorer: Optional[int],
-               away_scorer: Optional[int]):
+               away_scorer: Optional[int]) -> "Bet":
 
         if home_scorer is None and away_scorer is None:
-            raise AttributeError(f"No scorer has been selected")
+            raise AttributeError(f"No scorer has been selected")  # TODO: domain error
 
-        home_bet = TeamBet(home_score, is_home_wins, home_scorer)
-        away_bet = TeamBet(away_score, not is_home_wins, away_scorer)
-        return Bet(_id, game, user, home_bet, away_bet)
+        home_bet = TeamBet(score=home_score, is_winner=is_home_wins, scored_player=home_scorer)
+        away_bet = TeamBet(score=away_score, is_winner=not is_home_wins, scored_player=away_scorer)
+        return Bet(id=_id, game=game, user=user, home_bet=home_bet, away_bet=away_bet)

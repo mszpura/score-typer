@@ -1,22 +1,22 @@
+from typing import Text
 from uuid import uuid4
 
-from app.core.entities.abstract_entity import AbstractEntity
+from .abstract_entity import AbstractEntity
 
 
 class User(AbstractEntity):
-    username: str
-    password: str
-    email: str
+    username: Text
+    password: Text
+    email: Text
 
     @classmethod
     def create(cls, **kwargs) -> "User":
-        user_id = uuid4()
-        return cls(id=str(user_id), **kwargs)
+        return cls(id=str(uuid4()), **kwargs)
 
     def update(self, username: str, password: str, email: str) -> None:
-        if username is not None:
+        if username:
             self.username = username
-        if password is not None:
+        if password:
             self.password = password
-        if email is not None:
+        if email:
             self.email = email

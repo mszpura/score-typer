@@ -1,18 +1,18 @@
 from typing import Text, Optional
 from datetime import datetime
-from uuid import  uuid4
-from pydantic import BaseModel
+from uuid import uuid4
+
+from .abstract_entity import AbstractEntity
 
 
-class Tournament(BaseModel):
-    id: Text
+class Tournament(AbstractEntity):
     name: Text
     description: Optional[Text]
     last_date_to_register: datetime
 
     @classmethod
     def create(cls, **kwargs) -> "Tournament":
-        return Tournament(id=uuid4(), **kwargs)
+        return Tournament(id=str(uuid4()), **kwargs)
 
     def update(self, name: Text, desc: Text, last_date_to_register: datetime) -> None:
         if name:
