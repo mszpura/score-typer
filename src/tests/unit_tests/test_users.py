@@ -2,9 +2,10 @@ import json
 import uuid
 
 import pytest
+
+from app.adapters.repositories.repository import Repository
 from tests.arrangers.an_user import AnUser, SomeUsers
 from tests.arrangers.an_user_dto import AnUserDto
-from app.adapters.repositories.users_repo import UsersRepository
 
 
 def test_create_user(test_app, monkeypatch):
@@ -12,7 +13,7 @@ def test_create_user(test_app, monkeypatch):
 
     async def mock_post(_self, _payload):
         pass
-    monkeypatch.setattr(UsersRepository, "create", mock_post)
+    monkeypatch.setattr(Repository, "create", mock_post)
 
     response = test_app.post("/users", data=test_user.json())
     assert response.status_code == 201
@@ -36,7 +37,7 @@ def test_read_user(test_app, monkeypatch):
         if user_id == test_id:
             return test_data
         return None
-    monkeypatch.setattr(UsersRepository, "get", mock_get)
+    monkeypatch.setattr(Repository, "get", mock_get)
 
     response = test_app.get(f"/users/{test_id}")
     assert response.status_code == 200
@@ -46,7 +47,7 @@ def test_read_user(test_app, monkeypatch):
 def test_read_user_incorrect_id(test_app, monkeypatch):
     async def mock_get(_self, _user_id):
         return None
-    monkeypatch.setattr(UsersRepository, "get", mock_get)
+    monkeypatch.setattr(Repository, "get", mock_get)
 
     response = test_app.get(f"/users/{uuid.uuid4()}")
     assert response.status_code == 404
@@ -58,7 +59,7 @@ def test_read_all_users(test_app, monkeypatch):
 
     async def mock_get_all(_self, ):
         return test_data
-    monkeypatch.setattr(UsersRepository, "get_all", mock_get_all)
+    monkeypatch.setattr(Repository, "get_all", mock_get_all)
 
     response = test_app.get("/users")
     assert response.status_code == 200
@@ -72,11 +73,11 @@ def test_update_user(test_app, monkeypatch):
 
     async def mock_get(_self, _user_id):
         return test_result
-    monkeypatch.setattr(UsersRepository, "get", mock_get)
+    monkeypatch.setattr(Repository, "get", mock_get)
 
     async def mock_put(_self, _payload):
         pass
-    monkeypatch.setattr(UsersRepository, "update", mock_put)
+    monkeypatch.setattr(Repository, "update", mock_put)
 
     response = test_app.put(f"/users/{test_id}", data=test_data.json())
     print(response.json())
@@ -98,7 +99,7 @@ def test_update_user(test_app, monkeypatch):
 def test_update_user_invalid(test_app, monkeypatch, user_id, payload, status_code):
     async def mock_get(_self, _user_id):
         return None
-    monkeypatch.setattr(UsersRepository, "get", mock_get)
+    monkeypatch.setattr(Repository, "get", mock_get)
 
     response = test_app.put(f"/users/{user_id}", data=json.dumps(payload),)
     assert response.status_code == status_code
@@ -110,11 +111,11 @@ def test_remove_user(test_app, monkeypatch):
 
     async def mock_get(_self, _user_id):
         return test_data
-    monkeypatch.setattr(UsersRepository, "get", mock_get)
+    monkeypatch.setattr(Repository, "get", mock_get)
 
     async def mock_delete(_self, _user_id):
         pass
-    monkeypatch.setattr(UsersRepository, "delete", mock_delete)
+    monkeypatch.setattr(Repository, "delete", mock_delete)
 
     response = test_app.delete(f"/users/{test_id}")
     assert response.status_code == 200
@@ -124,7 +125,7 @@ def test_remove_user(test_app, monkeypatch):
 def test_remove_user_incorrect_id(test_app, monkeypatch):
     async def mock_get(_self, _user_id):
         return None
-    monkeypatch.setattr(UsersRepository, "get", mock_get)
+    monkeypatch.setattr(Repository, "get", mock_get)
 
     response = test_app.delete(f"/users/{uuid.uuid4()}")
     assert response.status_code == 404

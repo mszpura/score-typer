@@ -1,5 +1,5 @@
 from typing import List
-from uuid import UUID, uuid4
+from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Depends
 from app.api.composition import compose_user_repository
@@ -14,8 +14,7 @@ router = APIRouter()
 async def create_user(
         payload: UserDto,
         repo: AbstractRepository = Depends(compose_user_repository)):
-    user_id = uuid4()
-    user = payload.to_domain(user_id)
+    user = User.create(**payload.dict())
     await repo.create(user)
     return user
 
