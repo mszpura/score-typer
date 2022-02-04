@@ -8,9 +8,8 @@ class AbstractDto(ABC, BaseModel):
     pass
 
 
-class AbstractEntity(ABC):
+class AbstractEntity(ABC, BaseModel):
     id: Text
-    dto: AbstractDto
 
     @classmethod
     @abstractmethod
