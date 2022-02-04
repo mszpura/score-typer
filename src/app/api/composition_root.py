@@ -7,13 +7,14 @@ from app.core.entities.bet import Bet
 from app.core.entities.game import Game
 from app.core.entities.tournament import Tournament
 from app.core.entities.user import User
+from app.core.proxies import AbstractRepository
 
 
 async def compose_users_repository(session: AsyncSession = Depends(get_session)):
     yield Repository("users", User, session)
 
 
-async def compose_tournaments_repository(session: AsyncSession = Depends(get_session)):
+async def compose_tournaments_repository(session: AsyncSession = Depends(get_session)) -> AbstractRepository:
     yield Repository("tournaments", Tournament, session)
 
 

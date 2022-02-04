@@ -22,24 +22,24 @@ class Repository(AbstractRepository):
         result = await self.session.execute(
             f"SELECT json FROM {self.table_name} WHERE id = :id",
             {"id": str(id)})
-        user = result.fetchone()
-        if user is not None:
-            return self.map_user(user)
+        entity = result.fetchone()
+        if entity:
+            return self.map_entity(entity)
         return None
 
     async def get_all(self) -> List[AbstractEntity]:
         result = await self.session.execute(f"SELECT * FROM {self.table_name}")
-        return list(map(self.map_user, result.fetchall()))
+        return list(map(self.map_entity, result.fetchall()))
 
-    async def update(self, user: AbstractEntity) -> None:
+    async def update(self, entity: AbstractEntity) -> None:
         await self.session.execute(
             f"UPDATE {self.table_name} SET json = :json WHERE id = :id",
-            {"json": user.json(), "id": UUID(user.id)})
+            {"json": entity.json(), "id": UUID(entity.id)})
         await self.session.commit()
 
-    async def delete(self, user_id: UUID):
-        await self.session.execute(f"DELETE FROM {self.table_name} WHERE id = :id", {"id": user_id})
+    async def delete(self, id: UUID):
+        await self.session.execute(f"DELETE FROM {self.table_name} WHERE id = :id", {"id": id})
         await self.session.commit()
 
-    def map_user(self, user):
-        return self.entity_type.create(**user["json"])
+    def map_entity(self, entity):
+        return self.entity_type(**entity["json"])

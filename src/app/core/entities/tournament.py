@@ -12,7 +12,7 @@ class Tournament(AbstractEntity):
 
     @classmethod
     def create(cls, **kwargs) -> "Tournament":
-        return Tournament(id=str(uuid4()), **kwargs)
+        return cls(id=str(uuid4()), **kwargs)
 
     def update(self, name: Text, desc: Text, last_date_to_register: datetime) -> None:
         if name:
