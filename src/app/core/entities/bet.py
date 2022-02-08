@@ -1,10 +1,11 @@
 from typing import Optional
-from uuid import UUID
+from uuid import UUID, uuid4
 from pydantic import BaseModel
 
 from .abstract_entity import AbstractEntity
 from .game import Game
 from .user import User
+from ..exceptions import NotSelectedScorerError
 
 
 class TeamBet(BaseModel):
@@ -22,7 +23,6 @@ class Bet(AbstractEntity):
 
     @classmethod
     def create(cls,
-               _id: UUID,
                game: Game,
                user: User,
                home_score: int,
@@ -32,8 +32,8 @@ class Bet(AbstractEntity):
                away_scorer: Optional[int]) -> "Bet":
 
         if home_scorer is None and away_scorer is None:
-            raise AttributeError(f"No scorer has been selected")  # TODO: domain error
+            raise NotSelectedScorerError(f"No scorer has been selected")  # TODO: domain error
 
         home_bet = TeamBet(score=home_score, is_winner=is_home_wins, scored_player=home_scorer)
         away_bet = TeamBet(score=away_score, is_winner=not is_home_wins, scored_player=away_scorer)
-        return Bet(id=_id, game=game, user=user, home_bet=home_bet, away_bet=away_bet)
+        return Bet(id=uuid4(), game=game, user=user, home_bet=home_bet, away_bet=away_bet)

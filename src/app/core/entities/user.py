@@ -14,9 +14,6 @@ class User(AbstractEntity):
         return cls(id=str(uuid4()), **kwargs)
 
     def update(self, username: str, password: str, email: str) -> None:
-        if username:
-            self.username = username
-        if password:
-            self.password = password
-        if email:
-            self.email = email
+        self.username = username
+        self.password = password
+        self.email = email

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Text, Optional
 
-from app.api.dtos.abstract_dto import AbstractDto
+from app.core.entities.abstract_entity import AbstractDto
 
 
 class TournamentDto(AbstractDto):

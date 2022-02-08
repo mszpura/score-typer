@@ -1,6 +1,8 @@
 from datetime import datetime
 from uuid import uuid4
 
+from app.api.dtos.tournament_dto import TournamentDto
+
 
 class ATournamentDto:
     def build(self):

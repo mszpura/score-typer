@@ -80,7 +80,6 @@ def test_update_user(test_app, monkeypatch):
     monkeypatch.setattr(Repository, "update", mock_put)
 
     response = test_app.put(f"/users/{test_id}", data=test_data.json())
-    print(response.json())
     assert response.status_code == 200
     assert response.json() == test_result.dict()
 

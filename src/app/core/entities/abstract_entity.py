@@ -16,7 +16,6 @@ class AbstractEntity(ABC, BaseModel):
     def create(cls, **kwargs):
         raise NotImplementedError
 
-    @classmethod
     @abstractmethod
-    def update(cls, **kwargs):
+    def update(self, **kwargs):
         raise NotImplementedError

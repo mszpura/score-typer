@@ -2,7 +2,8 @@ from typing import List
 from uuid import UUID
 
 from fastapi import HTTPException, Depends, APIRouter
-from app.api.composition_root import compose_users_repository
+
+from app.api.composition.users_module import compose_users_repository
 from app.api.dtos.user_dto import UserDto
 from app.core.entities.user import User
 from app.core.proxies import AbstractRepository

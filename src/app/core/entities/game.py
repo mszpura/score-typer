@@ -22,3 +22,6 @@ class Game(AbstractEntity):
     @classmethod
     def create(cls, **kwargs) -> "Game":
         return cls(id=str(uuid4()), **kwargs)
+
+    def update(self, **kwargs):
+        pass

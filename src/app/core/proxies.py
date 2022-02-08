@@ -1,25 +1,28 @@
 from abc import ABC, abstractmethod
+from typing import List
 from uuid import UUID
+
+from app.core.entities.abstract_entity import AbstractEntity
 
 
 class AbstractRepository(ABC):
 
     @abstractmethod
-    def create(self, entity):
+    async def create(self, entity) -> None:
         raise NotImplementedError
 
     @abstractmethod
-    def get(self, id: UUID):
+    async def get(self, id: UUID) -> AbstractEntity:
         raise NotImplementedError
 
     @abstractmethod
-    def get_all(self):
+    async def get_all(self) -> List[AbstractEntity]:
         raise NotImplementedError
 
     @abstractmethod
-    def update(self, entity):
+    async def update(self, entity) -> None:
         raise NotImplementedError
 
     @abstractmethod
-    def delete(self, id: UUID):
+    async def delete(self, id: UUID) -> None:
         raise NotImplementedError

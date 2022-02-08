@@ -20,6 +20,7 @@
         <option value="$MODULE_DIR$/src/app/api/dtos" />
         <option value="$MODULE_DIR$/src/app/api/routes" />
         <option value="$MODULE_DIR$/src/app/adapters/db" />
+        <option value="$MODULE_DIR$/src/app/api/handlers" />
       </list>
     </option>
   </component>

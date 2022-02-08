@@ -1,4 +1,4 @@
-from typing import Type, List
+from typing import Type, List, Callable, Awaitable
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -9,12 +9,16 @@ from app.core.proxies import AbstractRepository
 
 def create_crud_router_for(
         entity_type: Type[AbstractEntity],
-        repository_factory: AbstractRepository,
-        entity_dto_type: Type[AbstractDto]):
+        get_repository: Callable[[], AbstractRepository],
+        input_data_type: Type[AbstractDto],
+        custom_create_function: Callable[[AbstractDto], Awaitable[AbstractRepository]] = None,
+        custom_update_function: Callable[[UUID, AbstractDto], Awaitable[AbstractRepository]] = None):
     router = APIRouter()
 
     @router.post("", response_model=entity_type, status_code=201)
-    async def create(payload: entity_dto_type, repo: AbstractRepository = Depends(repository_factory)):
+    async def create(payload: input_data_type, repo: AbstractRepository = Depends(get_repository)):
+        if custom_create_function:
+            return await custom_create_function(payload)
         entity = entity_type.create(**payload.dict())
         await repo.create(entity)
         return entity
@@ -22,35 +26,35 @@ def create_crud_router_for(
     @router.get("/{id}", response_model=entity_type)
     async def get(
             id: UUID,
-            repo: AbstractRepository = Depends(repository_factory)):
+            repo: AbstractRepository = Depends(get_repository)):
         entity = await repo.get(id)
         if not entity:
             raise HTTPException(status_code=404, detail=f"{entity_type.__name__} not found")
         return entity
 
     @router.get("", response_model=List[entity_type])
-    async def get_all(repo: AbstractRepository = Depends(repository_factory)):
+    async def get_all(repo: AbstractRepository = Depends(get_repository)):
         return await repo.get_all()
 
-    @router.put("", response_model=entity_type)
-    async def update(id: UUID, payload: entity_dto_type, repo: AbstractRepository = Depends(repository_factory)):
+    @router.put("/{id}", response_model=entity_type)
+    async def update(id: UUID, payload: input_data_type, repo: AbstractRepository = Depends(get_repository)):
+        if custom_update_function:
+            return await custom_update_function(id, payload)
+
         entity = await repo.get(id)
         if not entity:
             raise HTTPException(status_code=404, detail=f"{entity_type.__name__} not found")
 
-        #todo
+        entity.update(**payload.dict())
+        await repo.update(entity)
         return entity
 
-    @router.delete("", response_model=entity_type)
-    async def delete(id: UUID, repo: AbstractRepository = Depends(repository_factory)):
+    @router.delete("/{id}", response_model=entity_type)
+    async def delete(id: UUID, repo: AbstractRepository = Depends(get_repository)):
         entity = await repo.get(id)
         if not entity:
             raise HTTPException(status_code=404, detail=f"{entity_type.__name__} not found")
         await repo.delete(id)
         return entity
-
-    @router.get("/qwe")
-    async def qwe():
-        return {"message": "test"}
 
     return router

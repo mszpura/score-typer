@@ -37,9 +37,9 @@ class Repository(AbstractRepository):
             {"json": entity.json(), "id": UUID(entity.id)})
         await self.session.commit()
 
-    async def delete(self, id: UUID):
+    async def delete(self, id: UUID) -> None:
         await self.session.execute(f"DELETE FROM {self.table_name} WHERE id = :id", {"id": id})
         await self.session.commit()
 
-    def map_entity(self, entity):
+    def map_entity(self, entity) -> AbstractEntity:
         return self.entity_type(**entity["json"])
