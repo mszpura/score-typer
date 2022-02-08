@@ -22,7 +22,8 @@ def upgrade():
         Column("table_id", Integer, primary_key=True, autoincrement=True),
         Column("id", UUID(as_uuid=True), unique=True, index=True),
         Column("json", JSON, nullable=False),
-        Column("created_date", DateTime, server_default=func.current_timestamp(), nullable=False)
+        Column("created_date", DateTime, server_default=func.current_timestamp(), nullable=False),
+        Column("finished_date", DateTime, nullable=True)
     )
 
 

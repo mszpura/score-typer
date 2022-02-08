@@ -32,7 +32,7 @@ class Bet(AbstractEntity):
                away_scorer: Optional[int]) -> "Bet":
 
         if home_scorer is None and away_scorer is None:
-            raise NotSelectedScorerError(f"No scorer has been selected")  # TODO: domain error
+            raise NotSelectedScorerError(f"No scorer has been selected")
 
         home_bet = TeamBet(score=home_score, is_winner=is_home_wins, scored_player=home_scorer)
         away_bet = TeamBet(score=away_score, is_winner=not is_home_wins, scored_player=away_scorer)

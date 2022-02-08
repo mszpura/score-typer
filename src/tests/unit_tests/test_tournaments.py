@@ -101,7 +101,7 @@ def test_update_tournament_invalid(test_app, monkeypatch, payload, status_code):
 
 
 def test_delete_tournament(test_app, monkeypatch):
-    test_data = Tournament.create(**ATournamentDto().build())
+    test_data = Tournament.create(**ATournamentDto().build().dict())
 
     async def mock_get(_self, _tournament_id):
         return test_data
@@ -113,7 +113,7 @@ def test_delete_tournament(test_app, monkeypatch):
 
     result = test_app.delete(f"/tournaments/{uuid4()}")
     assert result.status_code == 200
-    assert result.json() == json.dumps(test_data.dict)
+    assert result.json() == json.loads(test_data.json())
 
 
 def test_delete_tournament_incorrect_id(test_app, monkeypatch):

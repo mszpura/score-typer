@@ -10,6 +10,6 @@ class ATournamentDto:
             name=f"{uuid4()}",
             description=f"{uuid4()}",
             last_date_to_register=datetime.now(),
-            finished_date=None
+            finished_date=datetime.now()
         )
     

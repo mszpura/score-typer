@@ -8,4 +8,4 @@ class TournamentDto(AbstractDto):
     name: Text
     description: Optional[Text]
     last_date_to_register: datetime
-    #finished_date: Optional[datetime]
+    finished_date: Optional[datetime]
