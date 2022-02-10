@@ -7,7 +7,7 @@ Create Date: 2022-01-29 19:23:47.759292
 """
 from sqlalchemy.dialects.postgresql import UUID
 from alembic import op
-from sqlalchemy import Column,Integer, DateTime, JSON, func
+from sqlalchemy import Column, Integer, DateTime, JSON, func
 
 # revision identifiers, used by Alembic.
 revision = '106b1e2f6f8f'

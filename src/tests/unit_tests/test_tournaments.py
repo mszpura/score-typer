@@ -19,8 +19,6 @@ def test_create_tournament(test_app, monkeypatch):
     response = test_app.post("/tournaments", data=test_tournament.json())
 
     assert response.status_code == 201
-    result = response.json()
-    assert result["id"]
 
 
 @pytest.mark.parametrize(
