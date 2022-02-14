@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Text
+from uuid import UUID
 
 from pydantic import BaseModel
 
@@ -9,7 +9,7 @@ class AbstractDto(ABC, BaseModel):
 
 
 class AbstractEntity(ABC, BaseModel):
-    id: Text
+    id: UUID
 
     @classmethod
     @abstractmethod
@@ -19,3 +19,9 @@ class AbstractEntity(ABC, BaseModel):
     @abstractmethod
     def update(self, **kwargs):
         raise NotImplementedError
+
+    # Necessary configuration in domain because apparently Pydantic cannot parse UUID into json :/
+    class Config:
+        json_encoders = {
+            UUID: lambda i: str(i)
+        }

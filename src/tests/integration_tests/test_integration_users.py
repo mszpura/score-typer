@@ -1,4 +1,3 @@
-import json
 import pytest
 
 from tests.arrangers.an_user_dto import AnUserDto

@@ -12,10 +12,10 @@ class Repository(AbstractRepository):
         self.session = session
         self.entity_type = entity_type
 
-    async def create(self, user: AbstractEntity) -> None:
+    async def create(self, entity: AbstractEntity) -> None:
         await self.session.execute(
             f"INSERT INTO {self.table_name} (id, json) VALUES (:id, :json)",
-            {"id": UUID(user.id), "json": user.json()})
+            {"id": entity.id, "json": entity.json()})
         await self.session.commit()
 
     async def get(self, id: UUID) -> AbstractEntity | None:
@@ -34,7 +34,7 @@ class Repository(AbstractRepository):
     async def update(self, entity: AbstractEntity) -> None:
         await self.session.execute(
             f"UPDATE {self.table_name} SET json = :json WHERE id = :id",
-            {"json": entity.json(), "id": UUID(entity.id)})
+            {"json": entity.json(), "id": entity.id})
         await self.session.commit()
 
     async def delete(self, id: UUID) -> None:

@@ -1,10 +1,8 @@
 import json
 import uuid
-
 import pytest
-
 from app.adapters.repositories.repository import Repository
-from tests.arrangers.an_user import AnUser, SomeUsers
+from app.core.entities.user import User
 from tests.arrangers.an_user_dto import AnUserDto
 
 
@@ -30,18 +28,15 @@ def test_create_user_invalid_json(test_app):
 
 
 def test_read_user(test_app, monkeypatch):
-    test_id = uuid.uuid4()
-    test_data = AnUser().with_id(test_id).build()
+    test_data = User.create(**AnUserDto().build().dict())
 
     async def mock_get(_self, user_id):
-        if user_id == test_id:
-            return test_data
-        return None
+        return test_data
     monkeypatch.setattr(Repository, "get", mock_get)
 
-    response = test_app.get(f"/users/{test_id}")
+    response = test_app.get(f"/users/{uuid.uuid4()}")
     assert response.status_code == 200
-    assert response.json() == test_data
+    assert response.json() == json.loads(test_data.json())
 
 
 def test_read_user_incorrect_id(test_app, monkeypatch):
@@ -55,21 +50,20 @@ def test_read_user_incorrect_id(test_app, monkeypatch):
 
 
 def test_read_all_users(test_app, monkeypatch):
-    test_data = SomeUsers().build(5)
+    user1 = User.create(**AnUserDto().build().dict())
+    user2 = User.create(**AnUserDto().build().dict())
 
     async def mock_get_all(_self, ):
-        return test_data
+        return [user1, user2]
     monkeypatch.setattr(Repository, "get_all", mock_get_all)
 
     response = test_app.get("/users")
     assert response.status_code == 200
-    assert response.json() == test_data
 
 
 def test_update_user(test_app, monkeypatch):
-    test_id = uuid.uuid4()
     test_data = AnUserDto().build()
-    test_result = AnUser().with_id(test_id).build()
+    test_result = User.create(**test_data.dict())
 
     async def mock_get(_self, _user_id):
         return test_result
@@ -79,9 +73,9 @@ def test_update_user(test_app, monkeypatch):
         pass
     monkeypatch.setattr(Repository, "update", mock_put)
 
-    response = test_app.put(f"/users/{test_id}", data=test_data.json())
+    response = test_app.put(f"/users/{uuid.uuid4()}", data=test_data.json())
     assert response.status_code == 200
-    assert response.json() == test_result.dict()
+    assert response.json() == json.loads(test_result.json())
 
 
 @pytest.mark.parametrize(
@@ -105,8 +99,7 @@ def test_update_user_invalid(test_app, monkeypatch, user_id, payload, status_cod
 
 
 def test_remove_user(test_app, monkeypatch):
-    test_id = uuid.uuid4()
-    test_data = AnUser().with_id(test_id).build()
+    test_data = User.create(**AnUserDto().build().dict())
 
     async def mock_get(_self, _user_id):
         return test_data
@@ -116,9 +109,9 @@ def test_remove_user(test_app, monkeypatch):
         pass
     monkeypatch.setattr(Repository, "delete", mock_delete)
 
-    response = test_app.delete(f"/users/{test_id}")
+    response = test_app.delete(f"/users/{uuid.uuid4()}")
     assert response.status_code == 200
-    assert response.json() == test_data.dict()
+    assert response.json() == json.loads(test_data.json())
 
 
 def test_remove_user_incorrect_id(test_app, monkeypatch):

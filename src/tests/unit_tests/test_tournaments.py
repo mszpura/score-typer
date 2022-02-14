@@ -6,6 +6,7 @@ import pytest
 
 from app.adapters.repositories.repository import Repository
 from app.core.entities.tournament import Tournament
+from app.infrastructure.uuid_encoder import UUIDEncoder
 from tests.arrangers.a_tournament_dto import ATournamentDto
 
 
@@ -17,7 +18,6 @@ def test_create_tournament(test_app, monkeypatch):
     monkeypatch.setattr(Repository, "create", mock_post)
 
     response = test_app.post("/tournaments", data=test_tournament.json())
-
     assert response.status_code == 201
 
 
@@ -60,6 +60,19 @@ def test_read_tournament_incorrect_id(test_app, monkeypatch):
     response = test_app.get(f"/tournaments/{uuid4()}")
     assert response.status_code == 404
     assert response.json()["detail"] == "Tournament not found"
+
+
+def test_read_all_tournaments(test_app, monkeypatch):
+    tournament1 = Tournament.create(**ATournamentDto().build().dict())
+    tournament2 = Tournament.create(**ATournamentDto().build().dict())
+    tournaments = [tournament1, tournament2]
+
+    async def mock_get(_self):
+        return tournaments
+    monkeypatch.setattr(Repository, "get_all", mock_get)
+
+    response = test_app.get(f"/tournaments")
+    assert response.status_code == 200
 
 
 def test_update_tournament(test_app, monkeypatch):

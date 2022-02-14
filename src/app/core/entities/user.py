@@ -1,5 +1,5 @@
 from typing import Text
-from uuid import uuid4
+from uuid import uuid4, UUID
 
 from .abstract_entity import AbstractEntity
 
